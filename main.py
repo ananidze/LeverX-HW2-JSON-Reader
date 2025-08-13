@@ -25,7 +25,7 @@ class Room:
 class DataLoader(ABC):
     @abstractmethod
     def load(self, file_path: Path) -> list[dict[str, Any]]:
-        pass
+        ...
 
 
 class JSONDataLoader(DataLoader):
@@ -42,8 +42,7 @@ class JSONDataLoader(DataLoader):
 class DataExporter(ABC):
     @abstractmethod
     def export(self, rooms: list[Room], output_path: Path) -> None:
-        """Export rooms data to a file."""
-        pass
+        ...
 
 
 class JSONDataExporter(DataExporter):
