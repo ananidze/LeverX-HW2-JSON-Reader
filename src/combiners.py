@@ -1,3 +1,4 @@
+from collections import defaultdict
 from pathlib import Path
 
 from .loaders import DataLoader
@@ -18,10 +19,8 @@ class RoomStudentCombiner:
         ]
 
         # Group students by room ID
-        students_by_room: dict[int, list[Student]] = {}
+        students_by_room: dict[int, list[Student]] = defaultdict(list)
         for student in students:
-            if student.room not in students_by_room:
-                students_by_room[student.room] = []
             students_by_room[student.room].append(student)
 
         # Create Room objects with their associated students
