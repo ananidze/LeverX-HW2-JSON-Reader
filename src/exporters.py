@@ -2,9 +2,16 @@
 import json
 import xml.etree.ElementTree as ET
 from abc import ABC, abstractmethod
+from enum import Enum
 from pathlib import Path
 
 from .models import Room
+
+
+class ExportFormat(Enum):
+    """Supported export formats."""
+    JSON = "json"
+    XML = "xml"
 
 
 class DataExporter(ABC):
@@ -55,10 +62,17 @@ class XMLDataExporter(DataExporter):
 
 
 def create_exporter(format_type: str) -> DataExporter:
-    format_type = format_type.lower()
-    if format_type == "json":
-        return JSONDataExporter()
-    elif format_type == "xml":
-        return XMLDataExporter()
-    else:
-        raise ValueError(f"Unsupported export format: {format_type}")
+    exporters: dict[str, type[DataExporter]] = {
+        ExportFormat.JSON.value: JSONDataExporter,
+        ExportFormat.XML.value: XMLDataExporter,
+    }
+
+    try:
+        return exporters[format_type.lower()]()
+    except KeyError as err:
+        raise ValueError(
+            f"Unsupported export format: {format_type}. Supported formats: "
+            f"{', '.join(exporters.keys())}"
+        ) from err
+    
+    

@@ -4,7 +4,7 @@ import sys
 from pathlib import Path
 
 from .combiners import RoomStudentCombiner
-from .exporters import create_exporter
+from .exporters import create_exporter, ExportFormat
 from .loaders import JSONDataLoader
 
 
@@ -36,9 +36,9 @@ def parse_arguments() -> argparse.Namespace:
 
     parser.add_argument(
         "--format",
-        choices=["json", "xml"],
-        default="json",
-        help="Output format (default: json)",
+        choices=[format_type.value for format_type in ExportFormat],
+        default=ExportFormat.JSON.value,
+        help="Output format (default: json, available: json, xml)",
     )
 
     return parser.parse_args()
